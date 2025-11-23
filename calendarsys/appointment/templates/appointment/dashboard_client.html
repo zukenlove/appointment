@@ -1,0 +1,33 @@
+{% extends "appointment/base_site.html" %}
+
+{% block content %}
+    <h1>Welcome, {{ user.username }}</h1>
+    <h1>Client Dashboard</h1>
+
+    <h2>My Appointments</h2>
+    {% for business, appointments in grouped_appointments.items %}
+        <h3>{{ business.name }}</h3>
+        <ul>
+            {% for appt in appointments %}
+                <li>{{ appt.slot.day.date }} {{ appt.slot.start }}-{{ appt.slot.end }}
+                    <form action="{% url 'calendar:cancel_booking' appt.slot.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Cancel</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% empty %}
+        <p>You have no appointments yet.</p>
+    {% endfor %}
+
+    <h2>Available Businesses & Slots</h2>
+    {% for business_info in business_data %}
+        <h3>{{ business_info.business.name }}</h3>
+        {% for day_info in business_info.available_days %}
+            <p>{{ day_info.day.date }} - {{ day_info.available_slots_count }} slots available
+                <a href="{% url 'calendar:day_detail' day_info.day.id %}">View Slots</a>
+            </p>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}

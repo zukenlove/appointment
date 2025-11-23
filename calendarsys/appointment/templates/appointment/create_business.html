@@ -1,0 +1,15 @@
+{% extends "appointment/base_site.html" %}
+
+{% block content %}
+<h1>Create a New Business</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Create Business</button>
+</form>
+
+<p><a href="{% url 'calendar:business_list' %}">Back to Business List</a></p>
+
+{% endblock %}

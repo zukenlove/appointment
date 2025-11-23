@@ -1,0 +1,14 @@
+{% extends "appointment/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<h2>Generate Slots for {{ day.date }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Generate Slots</button>
+</form>
+
+<a href="{% url 'calendar:day-list' %}">Back to Days</a>
+{% endblock %}

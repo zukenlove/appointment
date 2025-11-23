@@ -1,0 +1,41 @@
+{% extends "appointment/base_site.html" %}
+
+{% block content %}
+<h1>Welcome, {{ user.username }}</h1>
+
+{% if user.is_staff or user.is_superuser %}
+    <h2>All Appointments (Admin/Staff View)</h2>
+{% else %}
+    <h2>Your Appointments</h2>
+{% endif %}
+
+{% if appointments_by_business %}
+    {% for business, appointments in appointments_by_business.items %}
+        <h3>{{ business.name }}</h3>
+        <ul>
+            {% for appt in appointments %}
+                <li>
+                    {{ appt.slot.day.date }}: {{ appt.slot.start }} - {{ appt.slot.end }}
+                    {% if not user.is_staff %}
+                        <a href="{% url 'calendar:cancel_booking' appt.slot.id %}">Cancel</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+{% else %}
+    <p>No appointments found.</p>
+{% endif %}
+
+<h2>Available Days</h2>
+<ul>
+    {% for day in available_days %}
+        <li>
+            {{ day.date }} ({{ day.available_slots }} slots available) 
+            <a href="{% url 'calendar:day_detail' day.id %}">View Slots</a>
+        </li>
+    {% empty %}
+        <li>No days available for booking.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "appointment/base_site.html" %}
+
+{% block content %}
+<h1>Add Day to {{ business.name }}</h1>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Day</button>
+</form>
+
+<p><a href="{% url 'calendar:business_detail' business.id %}">Back to Business</a></p>
+{% endblock %}

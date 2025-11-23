@@ -1,0 +1,47 @@
+{% extends "appointment/base_site.html" %}
+
+{% block content %}
+<h1>{{ day.business.name }} - {{ day.date|date:"l, M d, Y" }}</h1>
+
+<h2>Slots & Bookings</h2>
+
+{% if slots_info %}
+    <table>
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Client</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for info in slots_info %}
+                <tr>
+                    <td>{{ info.slot.start|time:"H:i" }} - {{ info.slot.end|time:"H:i" }}</td>
+                    <td>
+                        {% if info.slot.is_booked %}
+                            Booked
+                        {% else %}
+                            Available
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if info.bookings %}
+                            {% for booking in info.bookings %}
+                                {{ booking.client.username }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No slots have been created for this day yet.</p>
+{% endif %}
+
+<p><a href="{% url 'calendar:business_detail' day.business.id %}">Back to Business</a></p>
+
+{% endblock %}

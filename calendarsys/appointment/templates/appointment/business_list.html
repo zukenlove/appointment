@@ -1,0 +1,18 @@
+
+<h1>Businesses</h1>
+
+{% if businesses %}
+    <ul>
+        {% for business in businesses %}
+            <li>
+                <strong>{{ business.name }}</strong>
+                {% if business.description %}- {{ business.description }}{% endif %}
+                <a href="{% url 'calendar:business_detail' business.id %}">View</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No businesses available.</p>
+{% endif %}
+
+

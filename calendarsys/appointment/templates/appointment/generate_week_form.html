@@ -1,0 +1,17 @@
+{% extends "appointment/base_site.html" %}
+
+{% block content %}
+<h2>Generate a Full Week Starting {{ day.date }}</h2>
+
+<p>This will create 7 days from {{ day.date }} and generate slots on each day.</p>
+
+<form method="post">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+
+    <button type="submit" class="btn btn-primary">Generate Week</button>
+    <a href="{% url 'calendar:day_detail' day.id %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

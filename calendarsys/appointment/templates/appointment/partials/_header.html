@@ -1,0 +1,41 @@
+<nav>
+    <ul>
+        <!-- Common Links -->
+        <li><a href="{% url 'calendar:dashboard' %}">Dashboard</a></li>
+
+        {% if user.is_authenticated %}
+            {% if user.profile %}
+                {% if user.profile.role == 'owner' %}
+                    <!-- Owner Links -->
+                    <li><a href="{% url 'calendar:business_list' %}">My Businesses</a></li>
+                    <li><a href="{% url 'calendar:create_business' %}">Create Business</a></li>
+                {% elif user.profile.role == 'client' %}
+                    <!-- Client Links -->
+                    <li><a href="{% url 'calendar:business_list' %}">Browse Businesses</a></li>
+                {% endif %}
+            {% endif %}
+
+            <!-- Logout -->
+            <li>
+                <form action="{% url 'calendar:logout' %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            </li>
+        {% else %}
+            <!-- Guest Links -->
+            <li><a href="{% url 'calendar:login' %}">Login</a></li>
+            <li><a href="{% url 'calendar:signup' %}">Sign Up</a></li>
+        {% endif %}
+    </ul>
+</nav>
+<hr>
+
+<!-- Optional: show messages -->
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}

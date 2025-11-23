@@ -1,0 +1,30 @@
+{% extends "appointment/base_site.html" %}
+
+{% block content %}
+<h1>{{ business.name }} - Owner Dashboard</h1>
+
+<h2>Days & Slots</h2>
+
+{% for info in days_info %}
+    <h3>{{ info.day.date }}</h3>
+    <p>Available slots: {{ info.available_slots }}</p>
+
+    {% if info.bookings %}
+        <h4>Bookings:</h4>
+        <ul>
+            {% for appointment in info.bookings %}
+                <li>{{ appointment.slot.start }} - {{ appointment.slot.end }} : {{ appointment.client.username }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No bookings yet.</p>
+    {% endif %}
+
+    <p><a href="{% url 'calendar:generate_slots' info.day.id %}">Generate Slots for this Day</a></p>
+{% empty %}
+    <p>No days created yet.</p>
+{% endfor %}
+
+<p><a href="{% url 'calendar:create_day' business.id %}">Add a New Day</a></p>
+<p><a href="{% url 'calendar:owner_dashboard' business.id %}">Back to Dashboard</a></p>
+{% endblock %}

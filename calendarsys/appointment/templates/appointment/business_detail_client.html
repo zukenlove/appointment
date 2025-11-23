@@ -1,0 +1,28 @@
+{% extends "appointment/base_site.html" %}
+
+{% block content %}
+<h1>{{ business.name }} - Available Slots</h1>
+
+{% for info in days_info %}
+    <h3>{{ info.day.date }}</h3>
+    {% if info.available_slots %}
+        <ul>
+        {% for slot in info.available_slots %}
+            <li>
+                {{ slot.start }} - {{ slot.end }}
+                <form method="POST" action="{% url 'calendar:book_slot' slot.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Book</button>
+                </form>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No available slots.</p>
+    {% endif %}
+{% empty %}
+    <p>No available days at this business.</p>
+{% endfor %}
+
+<p><a href="{% url 'calendar:business_list' %}">Back to Businesses</a></p>
+{% endblock %}
