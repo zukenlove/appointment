@@ -1,0 +1,13 @@
+{% extends "appointment/base_site.html" %}
+
+{% block content %}
+<h2>Cancel Booking</h2>
+
+<p>Are you sure you want to cancel your booking on <strong>{{ slot.day.date }}</strong> from <strong>{{ slot.start }} to {{ slot.end }}</strong>?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, Cancel Booking</button>
+    <a href="{% url 'calendar:dashboard' %}">No, Go Back</a>
+</form>
+{% endblock %}

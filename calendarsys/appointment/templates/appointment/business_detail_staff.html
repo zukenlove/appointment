@@ -1,0 +1,38 @@
+{% extends "appointment/base_site.html" %}
+{% block content %}
+
+<h1>{{ business.name }} — Staff Panel</h1>
+
+<p>Managing business as: <strong>{{ request.user.username }}</strong></p>
+
+<h2>Days & Slots</h2>
+
+{% for day in days %}
+    <div class="day-block">
+        <h3>{{ day.date|date:"l, M d Y" }}</h3>
+
+        {% if day.slots.all %}
+        <ul>
+            {% for slot in day.slots.all %}
+            <li>
+                {{ slot.start }} - {{ slot.end }}
+                {% if slot.is_booked %}
+                    <strong>Booked</strong>
+                    — by {{ slot.appointments.first.client.username }}
+                {% else %}
+                    <em>Available</em>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p>No slots created.</p>
+        {% endif %}
+
+        <a href="{% url 'calendar:generate_slots' day.id %}">Generate Slots</a>
+    </div>
+{% endfor %}
+
+<p><a href="{% url 'calendar:owner_dashboard' business.id %}">Back to Dashboard</a></p>
+
+{% endblock %}

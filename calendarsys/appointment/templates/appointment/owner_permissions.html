@@ -1,0 +1,26 @@
+{% extends "appointment/base_site.html" %}
+{% block content %}
+
+<h1>Staff Permissions for {{ business.name }}</h1>
+
+<h2>Group: {{ group.name }}</h2>
+
+<table>
+    <tr>
+        <th>Permission Name</th>
+        <th>Codename</th>
+        <th>Model</th>
+    </tr>
+
+    {% for perm in permissions %}
+    <tr>
+        <td>{{ perm.name }}</td>
+        <td>{{ perm.codename }}</td>
+        <td>{{ perm.content_type.model }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p><a href="{% url 'calendar:owner_dashboard' business.id %}">Back to Dashboard</a></p>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "appointment/base_site.html" %}
+
+{% block content %}
+<h1>Available Days</h1>
+
+{% for weekday, days in grouped_days.items %}
+    <h2>{{ weekday }}</h2>
+    <ul>
+        {% for day in days %}
+            {% if day.date < today %}
+                <li style="color: #aaa;">{{ day.date }} — Past date</li>
+            {% else %}
+                <li>
+                    {{ day.date }} — {{ day.available_slots }} available slots
+                    <a href="{% url 'calendar:day_detail' day.id %}">View</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endfor %}
+
+{% endblock %}

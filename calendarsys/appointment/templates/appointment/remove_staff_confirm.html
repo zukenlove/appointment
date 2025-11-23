@@ -1,0 +1,18 @@
+{% extends "appointment/base_site.html" %}
+{% block content %}
+
+<h1>Remove Staff Member</h1>
+
+<p>Are you sure you want to remove 
+   <strong>{{ staff_user.username }}</strong> 
+   from the staff of <strong>{{ business.name }}</strong>?</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, remove</button>
+    <a href="{% url 'calendar:owner_dashboard' business.id %}" class="btn btn-secondary">
+        Cancel
+    </a>
+</form>
+
+{% endblock %}

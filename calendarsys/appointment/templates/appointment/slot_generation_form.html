@@ -1,0 +1,20 @@
+{% extends "appointment/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<form method="post">{% csrf_token %}
+  {{ form.as_p }}
+  <input type="hidden" name="apply" value="1">
+  <button type="submit" class="button default">Generate Slots</button>
+</form>
+
+<h3>Selected Days</h3>
+<ul>
+  {% for day in days %}
+    <li>{{ day.date }} ({{ day.provider.username }})</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

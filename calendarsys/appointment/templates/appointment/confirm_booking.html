@@ -1,0 +1,19 @@
+{% extends "appointment/base_site.html" %}
+
+{% block content %}
+<h2>Confirm Booking</h2>
+
+<p>You are about to book the following time slot:</p>
+
+<ul>
+    <li><strong>User:</strong> {{ request.user.username }}</li>
+    <li><strong>Date:</strong> {{ slot.day.date }}</li>
+    <li><strong>Time:</strong> {{ slot.start }} - {{ slot.end }}</li>
+</ul>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirm Booking</button>
+    <a href="{% url 'calendar:day_detail' slot.day.id %}">Cancel</a>
+</form>
+{% endblock %}

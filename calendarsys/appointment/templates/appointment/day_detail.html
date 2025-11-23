@@ -1,0 +1,65 @@
+{% extends "appointment/base_site.html" %}
+
+{% block content %}
+<h1>Day: {{ day.date }}</h1>
+
+<!-- <a href="{% url 'calendar:generate_slots' day.id %}">Generate For This Day</a> |
+<a href="{% url 'calendar:generate_week' day.id %}">Generate Full Week</a> |
+<a href="{% url 'calendar:generate_month' day.id %}">Generate Month</a> -->
+
+<a href="{% url 'calendar:dashboard' %}">Back to Days</a>
+
+<h2>Time Slots</h2>
+
+{% if user_booking %}
+    <p style="color:#856404;background:#fff3cd;padding:8px;border-radius:4px;">
+        You already have a booking today:
+        <strong>{{ user_booking.slot.start }} - {{ user_booking.slot.end }}</strong>
+    </p>
+{% endif %}
+
+<ul>
+{% for slot in day.slots.all %}
+    {% if slot.is_booked %}
+        {% with slot.appointment_set.first as appt %}
+            {% if appt.user == request.user %}
+                <li class="slot booked-by-me">
+                    {{ slot.start }} - {{ slot.end }} (Booked by you)
+                    <a href="{% url 'calendar:cancel_booking' slot.id %}">Cancel</a>
+                </li>
+            {% else %}
+                <li class="slot booked">
+                    {{ slot.start }} - {{ slot.end }} (Booked)
+                </li>
+            {% endif %}
+        {% endwith %}
+
+    {% else %}
+        {% if user_booking %}
+            <!-- User already booked: show as unavailable -->
+            <li class="slot unavailable">
+                {{ slot.start }} - {{ slot.end }} (Unavailable)
+            </li>
+        {% else %}
+            <!-- User free to book -->
+            <li class="slot available">
+                {{ slot.start }} - {{ slot.end }}
+                <a href="{% url 'calendar:book_slot' slot.id %}">Book</a>
+            </li>
+        {% endif %}
+    {% endif %}
+{% empty %}
+    <li>No slots available for this day.</li>
+{% endfor %}
+</ul>
+
+<style>
+ul { list-style: none; padding: 0; }
+li.slot { padding: 8px 12px; margin-bottom: 4px; border-radius: 4px; font-weight: bold; }
+li.available { background-color: #d4edda; color: #155724; }      /* green */
+li.booked { background-color: #f8d7da; color: #721c24; }         /* red */
+li.booked-by-me { background-color: #fff3cd; color: #856404; }   /* yellow */
+li.unavailable { background-color: #e2e3e5; color: #6c757d; }    /* grey */
+</style>
+
+{% endblock %}

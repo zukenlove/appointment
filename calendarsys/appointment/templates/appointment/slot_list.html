@@ -1,0 +1,19 @@
+<h2>Time Slots for {{ day.date }}</h2>
+
+<ul>
+ {% for slot in slots %}
+    {% if slot.day.date < today or (slot.day.date == today and slot.start < now.time) %}
+        <li style="color: #aaa;">{{ slot.start }} - {{ slot.end }} (Past)</li>
+    {% else %}
+        <li>
+            {{ slot.start }} - {{ slot.end }}
+            {% if not slot.is_booked %}
+                <a href="{% url 'calendar:book_slot' slot.id %}">Book</a>
+            {% else %}
+                (Booked)
+            {% endif %}
+        </li>
+    {% endif %}
+{% endfor %}
+
+</ul>

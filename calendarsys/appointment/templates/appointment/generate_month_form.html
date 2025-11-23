@@ -1,0 +1,17 @@
+{% extends "appointment/base_site.html" %}
+
+{% block content %}
+<h2>Generate Month: {{ month }}/{{ year }}</h2>
+
+<p>This will generate every day in the month and create time slots.</p>
+
+<form method="post">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+
+    <button type="submit" class="btn btn-primary">Generate Month</button>
+    <a href="{% url 'calendar:day_detail' day.id %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

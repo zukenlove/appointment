@@ -1,0 +1,9 @@
+<h1>{{ business.name }} - Available Days</h1>
+<ul>
+{% for day in days %}
+  <li>
+    {{ day.date }} - {{ day.available_slots }} slots available
+    <a href="{% url 'calendar:day_detail' day.id %}">View Slots</a>
+  </li>
+{% endfor %}
+</ul>

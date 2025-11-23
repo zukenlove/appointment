@@ -1,0 +1,68 @@
+{% extends "appointment/base_site.html" %}
+{% block content %}
+
+<h1>{{ business.name }} – Owner Dashboard</h1>
+
+<h2>Staff Members</h2>
+
+{% if staff_members %}
+<ul>
+    {% for staff in staff_members %}
+    <li>
+        {{ staff.username }}
+        <a href="{% url 'calendar:remove_staff' business.id staff.id %}">Remove</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No staff assigned to this business yet.</p>
+{% endif %}
+
+<p>
+    <a href="{% url 'calendar:add_staff' business.id %}" class="btn btn-primary">➕ Add Staff</a>
+</p>
+
+<p>
+    <a href="{% url 'calendar:owner_permissions' business.id %}" class="btn btn-secondary">
+        🔐 View Permissions Dashboard
+    </a>
+</p>
+
+<p><a href="{% url 'calendar:business_detail' business.id %}">Back to Business</a></p>
+
+{% for staff_member in active_staff %}
+<div class="modal fade" id="removeStaffModal{{ staff_member.user.id }}" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Remove Staff Member</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <p>Are you sure you want to deactivate 
+           <strong>{{ staff_member.user.username }}</strong>
+           as staff?</p>
+      </div>
+
+      <div class="modal-footer">
+        <form method="POST" action="{% url 'calendar:remove_staff' business.id staff_member.user.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, deactivate</button>
+        </form>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<button class="btn btn-outline-danger btn-sm"
+        data-bs-toggle="modal"
+        data-bs-target="#removeStaffModal{{ staff_member.user.id }}">
+    Remove
+</button>
+
+{% endblock %}
